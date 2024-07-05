@@ -1,0 +1,2 @@
+include *.md
+include unrar_tool/templates/*.html
