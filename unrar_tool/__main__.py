@@ -5,7 +5,6 @@ import subprocess
 
 from contextlib import asynccontextmanager
 from pathlib import Path
-from shlex import split
 from uuid import uuid4
 
 import uvicorn
@@ -29,6 +28,11 @@ OUT_DIR = Path(Settings().out_dir)
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    """Initialization and teardown code
+
+    Args:
+        _ (FastAPI): FastAPI object, not used.
+    """
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     yield
 
@@ -52,7 +56,7 @@ async def upload(f: UploadFile) -> dict[str, str]:
     Returns:
         dict: Some JSON indicating if the operation was successful.
     """
-    if f.content_type != "application/vnd.rar":
+    if f.content_type in ("application/vnd.rar", "application/x-rar"):
         raise HTTPException(status_code=400, detail="File format not supported. Please upload a .rar file")
 
     async with TemporaryDirectory() as d, NamedTemporaryFile() as rar_file:
@@ -63,11 +67,8 @@ async def upload(f: UploadFile) -> dict[str, str]:
         extract_dir = Path(d) / "extracted"
         output_zip = (OUT_DIR / str(uuid4())).with_suffix(".zip")
 
-        if subprocess.run(split(f"unrar x '-op{extract_dir}' '{rar_file.name}'")).returncode:
-            raise HTTPException(status_code=500, detail="Unable to extract, is this actulaly a rar file?")
-
-        if subprocess.run(split(f"zip -jr '{output_zip}' '{extract_dir}'")).returncode:
-            raise HTTPException(status_code=500, detail="Unable to zip extracted files, what went wrong?")
+        if subprocess.run(f"unar -D -o '{extract_dir}' '{rar_file.name}' && zip -jr '{output_zip}' '{extract_dir}'", shell=True).returncode:
+            raise HTTPException(status_code=500, detail="Unable extract files?")
 
         return FileResponse(output_zip, filename=Path(f.filename.replace("/", "_").replace(":", "-")).with_suffix(".zip").name)
 
