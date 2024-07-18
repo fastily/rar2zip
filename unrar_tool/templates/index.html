@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 
 <head>
     <meta charset="UTF-8">
@@ -10,46 +10,98 @@
 </head>
 
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center">RAR to ZIP Converter</h1>
-        <form id="upload-form" action="/" method="post" enctype="multipart/form-data" class="mt-4">
-            <div class="form-group">
-                <label for="file">Upload RAR File</label>
-                <input type="file" class="form-control-file" id="f" name="f" accept=".rar" required>
+    <div id="app" class="container mt-5">
+        <div class="row mb-3">
+
+            <div class="col-md-8 mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>RAR to ZIP Converter</h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <div v-if="screenToShow === 'upload'">
+                            <form id="upload-form" enctype="multipart/form-data" class="mt-4" @submit.prevent="doUpload">
+                                <div class="my-3">
+                                    <label for="f" class="form-label">Upload a .rar file to convert</label>
+                                    <input type="file" class="form-control" id="f" name="f" accept=".rar" @change="onFileSelected" required>
+                                </div>
+                                <div class="d-grid gap-2 col-6 mx-auto mt-5 mb-3">
+                                    <button type="submit" class="btn btn-primary" :disabled="uploadButtonDisabled">Convert</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div v-else-if="screenToShow === 'spinner'" class="d-flex justify-content-center">
+                            <div class="spinner-border m-5" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div v-else class="text-center">
+                            <a id="download-zip" class="btn me-3 btn-success" :href="downloadLink" download>Download ZIP</a>
+                            <a class="btn btn-outline-primary" @click="location.reload()" >Convert Another</a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            <button type="submit" class="btn btn-primary">Upload and Convert</button>
-        </form>
-        <div id="download-link" class="mt-4" style="display:none;">
-            <a id="download-zip" class="btn btn-success" href="" download>Download Extracted ZIP</a>
         </div>
+        <div class="row" v-show="message">
+            <div class="col-md-6 mx-auto">
+                <div class="alert alert-danger show my-3" role="alert">
+                    Error: {{message}}
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.31/vue.global.min.js" integrity="sha512-uFfFhP36JMGvEaE2jlZ8Hprsae8dNhmM7ZioMF8Wy8/z2ZtRq1FF+znjWOYeU3hpDenXQoCih190zwwoZ/9EbQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bs-custom-file-input/1.3.4/bs-custom-file-input.min.js" integrity="sha512-91BoXI7UENvgjyH31ug0ga7o1Ov41tOzbMM3+RPqFVohn1UbVcjL/f5sl6YSOFfaJp+rF+/IEbOOEwtBONMz+w==" crossorigin="anonymous"></script> -->
-    <script>
-        document.getElementById('upload-form').addEventListener('submit', async function (event) {
-            event.preventDefault();
+    <script type="importmap">
+        {
+          "imports": {
+            "vue": "https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.31/vue.esm-browser.prod.min.js"
+          }
+        }
+    </script>
+    <script type="module">
+        import { createApp } from 'vue'
 
-            const formData = new FormData();
-            formData.append('f', document.getElementById('f').files[0]);
+        createApp({
+            data() {
+                return {
+                    file: null,
+                    downloadLink: '',
+                    uploadButtonDisabled: true,
+                    screenToShow: "upload",
+                    message: ""
+                }
+            },
+            methods: {
+                onFileSelected(event) {
+                    this.file = event.target.files[0];
+                    console.log(this.file)
+                    this.uploadButtonDisabled = false;
+                },
+                async doUpload() {
+                    this.screenToShow = "spinner"
 
-            const response = await fetch('/', {
-                method: 'POST',
-                body: formData
-            });
+                    const formData = new FormData();
+                    formData.append('f', this.file);
 
-            if (response.ok) {
-                const blob = await response.blob();
-                const url = URL.createObjectURL(blob);
-                const downloadLink = document.getElementById('download-link');
-                const downloadZip = document.getElementById('download-zip');
-                downloadZip.href = url;
-                downloadLink.style.display = 'block';
-            } else {
-                alert('Failed to convert the file. Please try again.');
+                    try {
+                        const response = await fetch('/', { method: 'POST', body: formData });
+                        if (response.ok) {
+                            this.downloadLink = URL.createObjectURL(new File([await response.blob()], "my_file.zip"));
+                            this.screenToShow = "download"
+                        } else
+                            this.message = `Failed to convert the file.  Server said: ${response}`;
+
+                    } catch (error) {
+                        console.error('Error uploading file:', error);
+                        this.message = error
+                    }
+                }
             }
-        });
+        }).mount('#app')
     </script>
 </body>
 

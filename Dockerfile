@@ -2,6 +2,8 @@ FROM python
 
 ENV PYTHONUNBUFFERED=1
 
+EXPOSE 8000
+
 WORKDIR /app
 COPY unrar_tool ./unrar_tool
 COPY requirements.txt .

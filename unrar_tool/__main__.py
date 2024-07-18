@@ -56,7 +56,7 @@ async def upload(f: UploadFile) -> dict[str, str]:
     Returns:
         dict: Some JSON indicating if the operation was successful.
     """
-    if f.content_type in ("application/vnd.rar", "application/x-rar"):
+    if f.content_type not in ("application/vnd.rar", "application/x-rar"):
         raise HTTPException(status_code=400, detail="File format not supported. Please upload a .rar file")
 
     async with TemporaryDirectory() as d, NamedTemporaryFile() as rar_file:
