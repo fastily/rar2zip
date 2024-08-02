@@ -1,6 +1,5 @@
 """Main module, contains logic for web app"""
 
-import logging
 import subprocess
 
 from contextlib import asynccontextmanager
@@ -13,18 +12,11 @@ from aiofiles.tempfile import TemporaryDirectory, NamedTemporaryFile
 from fastapi import FastAPI, HTTPException, Request, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
-from rich.logging import RichHandler
 
 from .utils import Settings
 
 _CHUNK_SIZE = 1024 * 1024 * 4
-
-log = logging.getLogger(__name__)
-log.addHandler(RichHandler(rich_tracebacks=True))
-log.setLevel(logging.INFO)
-
 OUT_DIR = Path(Settings().out_dir)
-
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):

@@ -16,7 +16,7 @@
             <div class="col-md-8 mx-auto">
                 <div class="card">
                     <div class="card-header">
-                        <h3>RAR to ZIP Converter</h3>
+                        <h3>↔️ RAR to ZIP Converter</h3>
                     </div>
                     <div class="card-body p-4">
                         <div v-if="screenToShow === 'upload'">
@@ -36,8 +36,8 @@
                             </div>
                         </div>
                         <div v-else class="text-center">
-                            <a id="download-zip" class="btn me-3 btn-success" :href="downloadLink" download>Download ZIP</a>
-                            <a class="btn btn-outline-primary" @click="location.reload()" >Convert Another</a>
+                            <a id="download-zip" class="btn me-3 btn-success" :href="downloadLink" :download="downloadFileName">Download ZIP</a>
+                            <a class="btn btn-outline-primary" @click="doReload">Convert Another</a>
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
     <script type="importmap">
         {
           "imports": {
-            "vue": "https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.31/vue.esm-browser.prod.min.js"
+            "vue": "https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.35/vue.esm-browser.prod.min.js"
           }
         }
     </script>
@@ -72,13 +72,16 @@
                     downloadLink: '',
                     uploadButtonDisabled: true,
                     screenToShow: "upload",
+                    downloadFileName: "",
                     message: ""
                 }
             },
             methods: {
+                doReload() {
+                    location.reload();
+                },
                 onFileSelected(event) {
                     this.file = event.target.files[0];
-                    console.log(this.file)
                     this.uploadButtonDisabled = false;
                 },
                 async doUpload() {
@@ -91,6 +94,7 @@
                         const response = await fetch('/', { method: 'POST', body: formData });
                         if (response.ok) {
                             this.downloadLink = URL.createObjectURL(new File([await response.blob()], "my_file.zip"));
+                            this.downloadFileName = decodeURI(response.headers.get("content-disposition").split("filename*=utf-8''")[1]);
                             this.screenToShow = "download"
                         } else
                             this.message = `Failed to convert the file.  Server said: ${response}`;
