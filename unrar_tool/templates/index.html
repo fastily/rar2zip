@@ -51,7 +51,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -93,7 +92,7 @@
                     try {
                         const response = await fetch('/', { method: 'POST', body: formData });
                         if (response.ok) {
-                            this.downloadLink = URL.createObjectURL(new File([await response.blob()], "my_file.zip"));
+                            this.downloadLink = URL.createObjectURL(await response.blob());
                             this.downloadFileName = decodeURI(response.headers.get("content-disposition").split("filename*=utf-8''")[1]);
                             this.screenToShow = "download"
                         } else
