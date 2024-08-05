@@ -16,7 +16,4 @@ build
 dist
 *.egg-info
 
-# generated files
-uploads
-
-venv_unrar_tool
+venv_rar2zip

@@ -28,8 +28,8 @@ async def lifespan(_: FastAPI):
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     yield
 
-app = FastAPI(title="Unrar Tool", docs_url=None, redoc_url=None, lifespan=lifespan)
-templates = Jinja2Templates("unrar_tool/templates")
+app = FastAPI(title="rar2zip", docs_url=None, redoc_url=None, lifespan=lifespan)
+templates = Jinja2Templates("rar2zip/templates")
 
 
 @app.get("/")
@@ -66,4 +66,4 @@ async def upload(f: UploadFile) -> dict[str, str]:
 
 
 if __name__ == '__main__':
-    uvicorn.run("unrar_tool.__main__:app", reload=True)
+    uvicorn.run("rar2zip.__main__:app", reload=True)

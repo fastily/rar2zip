@@ -1,2 +1,2 @@
 include *.md
-include unrar_tool/templates/*.html
+include rar2zip/templates/*.html

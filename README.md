@@ -1,4 +1,4 @@
-# unrar-tool
+# rar2zip
 [![Python 3.12+](https://upload.wikimedia.org/wikipedia/commons/5/50/Blue_Python_3.12%2B_Shield_Badge.svg)](https://www.python.org)
 [![License: GPL v3](https://upload.wikimedia.org/wikipedia/commons/8/86/GPL_v3_Blue_Badge.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
@@ -13,14 +13,14 @@ A simple web service that makes it easy to convert rar to zip
 pip install -r requirements.txt
 
 # start in development mode, visit http://127.0.0.1:8000 to view the web interface
-python -m unrar_tool
+python -m rar2zip
 
 # run w/ gunicorn
-gunicorn -w 2 -k uvicorn.workers.UvicornWorker -b "0.0.0.0:8000" is_it_up.__main__:app
+gunicorn -w 2 -k uvicorn.workers.UvicornWorker -b "0.0.0.0:8000" rar2zip.__main__:app
 
 # docker build
-docker build -t unrar-tool .
+docker build -t rar2zip .
 
 # docker run
-docker run --dit --rm unrar-tool
+docker run --dit --rm rar2zip
 ```

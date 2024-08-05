@@ -4,19 +4,19 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="unrar-tool",
+    name="rar2zip",
     version="0.0.1",
     author="Fastily",
     author_email="fastily@users.noreply.github.com",
     description="A simple web service that makes it easy to convert rar to zip",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/fastily/unrar-tool",
+    url="https://github.com/fastily/rar2zip",
     project_urls={
-        "Bug Tracker": "https://github.com/fastily/unrar-tool/issues",
+        "Bug Tracker": "https://github.com/fastily/rar2zip/issues",
     },
     include_package_data=True,
-    packages=setuptools.find_packages(include=["unrar_tool"]),
+    packages=setuptools.find_packages(include=["rar2zip"]),
     install_requires=["aiofiles", "fastapi[all]", "gunicorn"],
     classifiers=[
         "Natural Language :: English",
