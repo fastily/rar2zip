@@ -22,5 +22,5 @@ gunicorn -w 2 -k uvicorn.workers.UvicornWorker -b "0.0.0.0:8000" rar2zip.__main_
 docker build -t rar2zip .
 
 # docker run
-docker run --dit --rm rar2zip
+docker run -it -p 8000:8000 rar2zip
 ```
