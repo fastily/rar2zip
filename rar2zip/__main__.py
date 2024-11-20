@@ -18,6 +18,7 @@ from .utils import Settings
 _CHUNK_SIZE = 1024 * 1024 * 4
 OUT_DIR = Path(Settings().out_dir)
 
+
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     """Initialization and teardown code
@@ -48,7 +49,7 @@ async def upload(f: UploadFile) -> dict[str, str]:
     Returns:
         dict: Some JSON indicating if the operation was successful.
     """
-    if f.content_type not in ("application/vnd.rar", "application/x-rar"):
+    if f.content_type not in ("application/vnd.rar", "application/x-rar", "application/octet-stream"):
         raise HTTPException(status_code=400, detail="File format not supported. Please upload a .rar file")
 
     async with TemporaryDirectory() as d, NamedTemporaryFile() as rar_file:
