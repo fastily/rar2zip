@@ -30,7 +30,7 @@ async def lifespan(_: FastAPI):
     yield
 
 app = FastAPI(title="rar2zip", docs_url=None, redoc_url=None, lifespan=lifespan)
-templates = Jinja2Templates("rar2zip/templates")
+templates = Jinja2Templates(Path(__file__).resolve().parent / "templates")
 
 
 @app.get("/")
