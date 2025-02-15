@@ -39,6 +39,15 @@ async def show_index(request: Request) -> HTMLResponse:
     return templates.TemplateResponse("index.html", {"request": request})
 
 
+@app.get("/health")
+async def health() -> dict:
+    """Health check endpoint which returns an empty body 200
+    Returns:
+        dict: An empty json object
+    """
+    return {}
+
+
 @app.post("/")
 async def upload(f: UploadFile) -> dict[str, str]:
     """File upload endpoint.
