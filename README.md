@@ -15,6 +15,6 @@ pip install -r requirements.txt
 # start in development mode, visit http://127.0.0.1:8000 to view the web interface
 python -m rar2zip
 
-# run w/ gunicorn
-gunicorn -w 2 -k uvicorn.workers.UvicornWorker -b "0.0.0.0:8000" rar2zip.__main__:app
+# run w/ gunicorn, accessible at localhost:8000
+gunicorn -w 2 -k uvicorn.workers.UvicornWorker -b "0.0.0.0" rar2zip.__main__:app
 ```
