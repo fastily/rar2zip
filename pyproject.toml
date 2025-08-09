@@ -1,6 +1,30 @@
 [build-system]
-requires = [
-    "setuptools>=42",
-    "wheel"
+requires = ["uv_build"]
+build-backend = "uv_build"
+
+[project]
+name = "rar2zip"
+version = "0.0.1"
+dependencies = ["aiofiles", "fastapi[all]", "gunicorn"]
+requires-python = ">=3.12"
+authors = [{name = "Fastily", email = "fastily@users.noreply.github.com"}]
+description = "A simple web service that makes it easy to convert rar to zip"
+readme = "README.md"
+license = "GPL-3.0-or-later"
+license-files = ["LICEN[CS]E.*"]
+keywords = ["rar", "zip"]
+classifiers = [
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent"
 ]
-build-backend = "setuptools.build_meta"
+
+[project.urls]
+Homepage = "https://github.com/fastily/rar2zip"
+"Bug Tracker" = "https://github.com/fastily/rar2zip/issues"
+
+[tool.uv.build-backend]
+module-name = "rar2zip"
+module-root = ""

@@ -4,17 +4,19 @@
 
 A simple web service that makes it easy to convert rar to zip
 
+⚠️ Do not run this in an untrusted environemnt, the app assumes any input files are safe.
+
 ## Dependencies
 * [unar](https://theunarchiver.com/command-line)
 
 ## Usage
 ```bash
 # install dependencies
-pip install -r requirements.txt
+uv sync --no-install-project
 
 # start in development mode, visit http://127.0.0.1:8000 to view the web interface
-python -m rar2zip
+uv run python -m rar2zip
 
 # run w/ gunicorn, accessible at localhost:8000
-gunicorn -w 2 -k uvicorn.workers.UvicornWorker -b "0.0.0.0" rar2zip.__main__:app
+uv run gunicorn -w 2 -k uvicorn.workers.UvicornWorker -b "0.0.0.0" rar2zip.__main__:app
 ```
