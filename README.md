@@ -4,7 +4,7 @@
 
 A simple web service that makes it easy to convert rar to zip
 
-⚠️ Do not run this in an untrusted environemnt, the app assumes any input files are safe.
+⚠️ Do not run this in an untrusted environment, the app assumes any input files are safe.
 
 ## Dependencies
 * [unar](https://theunarchiver.com/command-line)
